@@ -1,0 +1,180 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+<div class="container">
+
+   
+    <br>
+    {% if is_self%}
+    <h3 style="text-align:center;">{{profile.user.first_name}} {{profile.user.last_name}}</h3>
+    {% else %}
+    <h3 style="text-align:center;">{{addressing}} {{profile.user.last_name}}</h3>
+    {% endif %}
+
+  <div style="display:flex;">
+    <div >
+    <img  class="rounded-circle"src="{{profile.user.userr.profile_pic.url}}" alt=".." height="250" width="250">
+    </div>
+    <span style="margin-top:20px;margin-left:20px;font-size:18px"><i>{{profile.user.userr.bio}}</i></span>
+  </div>
+    <br><br><br>
+    {% if is_self %}
+        <a href={% url 'user_profile:profile-edit' request.user.userr.id %}><button class="btn btn-primary"><i class="fas fa-user-edit">  Edit Profile</i></button></a>
+    {% elif is_connection %}
+    <div class="nav-item dropdown">
+        <a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">
+            <button class="btn btn-primary "><i class="fas fa-user-check"></i> Connected</button>
+        </a>
+        
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href={% url 'user_connection:disconnect-user' profile.user.id %}>Disconnect</a>
+          <a class="dropdown-item" href="#">Block</a>
+          
+        </div>
+       
+    </div>
+      
+
+        
+    {% elif request_sent %}
+    <a href={% url 'user_connection:cancel-request' profile.user.id %}><button class="btn btn-danger"><i class="far fa-window-close"></i> Cancel request</button></a>
+    {% elif request_received %}
+      
+        <a class="btn btn-primary btn-lg {{button_status}}" role="button" href={% url 'user_connection:accept-request' profile.user.id %}><i class="fas fa-plus">  Accept</i></a>
+        <a class="btn btn-primary btn-lg  {{button_status}}" role="button" href={% url 'user_connection:decline-request' profile.user.id %}><i class="fas fa-user-times"></i> Decline</a>
+        {% if  button_status %}
+        <p class="text-secondary"> You will be able to use connection feature once your profile is verified.</p>
+        {% endif %}
+    {% elif no_requesst_sent_received %}
+    
+    <a class="btn btn-primary btn-lg {{button_status}} " role="button" href={% url 'user_connection:send-request' profile.user.id %}><i class="fas fa-user-plus"></i>  Connect</a>
+    {% if  button_status %}
+    <p class=" text-secondary"> You will be able to use connection feature once your profile is verified.</p>
+    {% endif %}
+    {% else %}
+        Something went wrong
+    {% endif %}
+
+
+    
+
+    <div class="accordion" id="accordionExample" style="margin-top:10px">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left" style="text-decoration:none"type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Overview
+              </button>
+            </h2>
+          </div>
+      
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  {% if is_connection or is_self %}
+                  <li class="list-group-item"><b>User:</b> {{profile.user.first_name}} {{profile.user.last_name}}</li>
+                  {% else %}
+                  <li class="list-group-item"><b>User:</b> ***** {{profile.user.last_name}}</li>
+
+                  {% endif %}
+                  <li class="list-group-item"><b>Age:</b>&nbsp {{profile.get_age}}</li>
+                  <li class="list-group-item"><b>Marital status :</b>&nbsp {{profile.marital_status}}</li>
+                  <li class="list-group-item"><i class="fas fa-map-marker-alt">&nbsp&nbspFrom:&nbsp&nbsp{{profile.user.userr.location.capitalize}}</i></li>
+                  <li class="list-group-item"><b>Academic Qualification :</b> &nbsp{{profile.education.capitalize}}</li>
+                  <li class="list-group-item"><b>Gender :</b>&nbsp {{profile.user.gender}}</li>
+                  
+
+                </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left collapsed" style="text-decoration:none"type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Is Looking for
+                {% if not is_self %}
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span style="float:right;color:green;font-size:18px"> Your profile matches {{match_count}} of {{pronoun}} preferences</span>
+                {% endif %} 
+              </button>
+            </h2>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="card-body">
+                {% if is_self %}
+                <a href="{% url 'partner_preference:preference_edit' request.user.preference.pk %}"><button class="btn btn-primary">Edit</button></a><br><br>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item "><h4><b>Religion:</h4></b> {{ religion|join:"/" }}<hr></li>
+                  <li class="list-group-item "><h4><b>Marital status :</h4></b> {{ marital_status|join:"/" }}<hr></li>
+                  <li class="list-group-item "><h4><b>Family Type :</h4></b> {{ family_type|join:"/" }}<hr></li>
+                  <li class="list-group-item "><h4><b>Rashi :</h4></b> {{ rashi|join:"/" }}<hr></li>
+                  <li class="list-group-item "><h4><b>Age:</h4></b> {{profile.user.preference.age_from}} - {{profile.user.preference.age_to}}<hr></li>
+                  <li class="list-group-item "><h4><b>Education :</h4></b> {{ education|join:"/" }}<hr></li>
+                
+                </ul>
+                {% else %}
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item list-group-item-{{religion_match}}"><h4><b>Religion:</h4></b> {{ religion|join:"/" }}{% if religion_match %}<i class="fas fa-check-circle" style="float:right"></i>{% endif %}<hr></li>
+                  <li class="list-group-item list-group-item-{{marital_status_match}}"><h4><b>Marital status :</h4></b> {{ marital_status|join:"/" }}{% if marital_status_match %}<i class="fas fa-check-circle" style="float:right"></i>{% endif %}<hr></li>
+                  <li class="list-group-item list-group-item-{{family_type_match}}"><h4><b>Family Type :</h4></b> {{ family_type|join:"/" }}{% if family_type_match %}<i class="fas fa-check-circle" style="float:right"></i>{% endif %}<hr></li>
+                  <li class="list-group-item list-group-item-{{rashi_match}}"><h4><b>Rashi :</h4></b> {{ rashi|join:"/" }}{% if rashi_match %}<i class="fas fa-check-circle" style="float:right"></i>{% endif %}<hr></li>
+                  <li class="list-group-item list-group-item-{{age_match}}"><h4><b>Age:</h4></b> {{profile.user.preference.age_from}} - {{profile.user.preference.age_to}}{% if age_match %}<i class="fas fa-check-circle" style="float:right"></i>{% endif %}<hr></li>
+                  <li class="list-group-item list-group-item-{{education_match}}"><h4><b>Education :</h4></b> {{ education|join:"/" }}{% if education_match %}<i class="fas fa-check-circle" style="float:right"></i>{% endif %}<hr></li>
+                
+                </ul>
+                {% endif %}
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left collapsed" style="text-decoration:none"type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Personal Details
+              </button>
+            </h2>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+          {% if is_connection or is_self%}
+              <li class="list-group-item"><b>Email :</b> {{profile.user.email}}</li>
+              <li class="list-group-item"><b>Address :</b> {{profile.location.capitalize}}</li>
+              <li class="list-group-item"><b>Contact :</b> {{profile.user.contact}}</li>
+              <li class="list-group-item"><b>Date Of Birth :</b> {{profile.DOB}}</li>
+          {% else %}
+              <h4 style="color:red">You are not connected to the user!</h4> Get connected first.
+              <li class="list-group-item"><b>Email : ******@gmail.com</b></li>
+              <li class="list-group-item"><b>Address :</b> *********</li>
+              <li class="list-group-item"><b>Contact :</b>98********</li>
+              <li class="list-group-item"><b>Date Of Birth :</b>*********</li>
+            {% endif %}
+  
+            </div>
+          </div>
+          
+        </div>
+      </div>
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left collapsed" style="text-decoration:none"type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Extra Details
+              </button>
+            </h2>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+              <li class="list-group-item"><b>Rashi :</b> {{profile.Rashi.capitalize }}</li>
+              <li class="list-group-item"><b>Family Type :</b> {{profile.family_type}}</li>
+
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+     
+    </div>
+{% endblock content %}

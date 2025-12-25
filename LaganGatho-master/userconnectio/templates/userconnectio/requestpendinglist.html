@@ -1,0 +1,34 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+{% if object_list %}
+<h3 class="text-primary" style="margin-bottom:20px">Profiles that wants to connect with you:</h3>
+
+    {% for pendingrequest in object_list %}
+    <div class="card mb-3" style="max-width: 540px; ">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{{pendingrequest.sender.userr.profile_pic.url}}" class="img-fluid rounded-start" alt="...">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">****** {{pendingrequest.sender.last_name}}</h5>
+            <i class="fas fa-map-marker-alt"></i><tb>&nbsp{{pendingrequest.sender.userr.location.capitalize}}<br>
+            
+            {{ pendingrequest.sender.userr.get_age}} years old <br>
+            {{pendingrequest.sender.userr.religion.capitalize}}<br>
+            <p class="card-text">Here lies the short and sweet information about the user</p>
+            
+            <a href={% url 'user_profile:profile-detail' pendingrequest.sender.id %} class="btn btn-primary">View Profile</a> <span style="float:right;color:green;"> {{pendingrequest.sender.final_match}}% Match</span>
+            <p class="card-text"><small class="text-muted">Joined on {{pendingrequest.sender.date_joined |date:"d M, Y" }}</small></p>
+          </div>
+        </div>
+      </div>
+    </div>      
+    {% endfor %}
+    {% else %}
+    <h3 style="margin-top:3rem"> Opps! No any pending requests so far.</h3>
+     {% endif %}
+
+    
+{% endblock content %}

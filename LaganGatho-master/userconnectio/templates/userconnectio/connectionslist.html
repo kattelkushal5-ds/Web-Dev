@@ -1,0 +1,39 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+{% if object_list %}
+<h3 class="text-primary" style="margin-top:3rem ;">All your connections: </h3><hr>
+<div style="margin-top:5rem">
+{% for connection in object_list %}
+<div class="card mb-3" style="max-width: 540px; ">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{connection.user.userr.profile_pic.url}}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{connection.user.first_name}} {{connection.user.last_name}}</h5>
+
+        <i class="fas fa-map-marker-alt"></i><tb>&nbsp{{connection.user.userr.location.capitalize}}<br>
+        
+        {{ connection.user.userr.get_age}} years old <br>
+        {{connection.user.userr.religion.capitalize}}<br>
+        <p class="card-text">Here lies the short and sweet information about the user</p>
+       
+        <a href={% url 'user_profile:profile-detail' connection.user.id %} class="btn btn-primary">View Profile</a> <span style="float:right;color:green;"> {{connection.user.final_match}}% Match</span>
+        <p class="card-text"><small class="text-muted">Joined on {{connection.user.date_joined |date:"d M, Y" }}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+</div>
+
+  {% else %}
+ <h3 style="margin-top:5rem"> Opps! No any connections yet. Try sending requests to suitable profiles.</h3>
+  {% endif %}
+
+    
+{% endblock content %}

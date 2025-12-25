@@ -1,0 +1,337 @@
+{% load crispy_forms_tags %}
+{% load account %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'users/main.css' %}"> {% endcomment %}
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+   
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+   
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap" rel="stylesheet">    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+{% comment %} boot5 {% endcomment %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+{% if title %}
+<title>{{title}}</title>
+{% else %}
+    <title>Lagan Gatho</title>
+{% endif %}
+
+{% comment %} template header {% endcomment %}
+<!-- Favicon -->
+<link href="media/img/favicon.ico" rel="icon">
+
+<!-- Google Web Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"> 
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+<!-- Flaticon Font -->
+<link href="{% static 'home/lib/flaticon/font/flaticon.css' %}" rel="stylesheet">
+
+<!-- Libraries Stylesheet -->
+<link href="{% static 'home/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+<link href="{% static 'home/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+<!-- Customized Bootstrap Stylesheet -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<link href="{% static 'home/css/style.css' %}" rel="stylesheet">
+
+{% comment %} End of template header {% endcomment %}
+<script>
+  $(document).ready(function() {
+      $(".toast").toast('show');
+  });
+</script>
+
+  </head>
+  <body style="font-size:15px">
+
+
+    {% comment %} <header >
+      <nav class="navbar navbar-expand-lg  navbar-dark bg-dark" style="position:fixed;width:100%;z-index:2;margin-top:0px">
+        <h1 class="m-0 display-5 text-capitalize"><span class="text-primary">Lagan</span><span style="color:white">Gatho</span></h1>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Find Partner</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href={% url 'mutual_recommendation:recommend-profile' %}>Recommended Profiles</a>
+            </li>
+            
+            <li class="nav-item dropdown" >
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                Connections
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item"  href="{% url 'user_connection:connection-list' %}">My Connections ({{request.user.connections.count}})</a>
+                <a class="dropdown-item" href={% url 'user_connection:request-list' %}>Pending Requests ({{request.user.sender.get_pending_request_frequency}})</a>
+                <a class="dropdown-item" href={% url 'user_connection:sent-list' %}>Sent Requests ({{request.user.sender.get_pending_request_frequency}})</a>
+                
+              </div>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown" style="margin-left: 65rem;">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                {{user.username}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'user_profile:profile-detail' user.id %}">My Profile</a>
+                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+              </div>
+            </li>
+            {% else %}
+            <div style="margin-left: 65rem;">
+              <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_signup' %}">Signin</a>
+            </li>
+          </ul>
+            </div>
+            {% endif %}
+          </ul>
+        </div>
+      </nav> 
+    </header>{% endcomment %}
+      {% comment %} <div class="container" style="padding-top: 60px;"> {% endcomment %}
+
+        <div class="container-fluid p-0" >
+          <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-lg-5">
+              {% comment %} <a href="" class="navbar-brand d-block d-lg-none">
+                  <h1 class="m-0 display-5 text-capitalize font-italic text-white"><span class="text-primary">Safety</span>First</h1>
+              </a> {% endcomment %}
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
+                  <div class="navbar-nav mr-auto py-0">
+                    <a href='/' style="text-decoration:none"><h1 class="m-0 display-5 text-capitalize" style="text-align:center"><span class="text-primary">Lagan</span><span style="color:white">Gatho   </span></h1></a>
+                      <a href="about.html" class="nav-item nav-link">About</a>
+                      <a href="about.html" class="nav-item nav-link">Contact Us</a>
+
+                      {% if user.is_authenticated %}
+
+                      <a class="nav-item nav-link" href={% url 'mutual_recommendation:recommend-profile' %}>Mutual</a>
+                      <li class="nav-item dropdown" >
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                          Connections
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <a class="dropdown-item"  href="{% url 'user_connection:connection-list' %}">My Connections <span class="badge bg-primary rounded-pill">{{request.user.connections.count}}</span></a>
+                          <a class="dropdown-item" href={% url 'user_connection:request-list' %}>Pending Requests ({{pending}})</a>
+                          <a class="dropdown-item" href={% url 'user_connection:sent-list' %}>Sent Requests ({{sent}})</a>
+                          
+                        </div>
+                      </li>
+                      
+
+
+                      
+            <li class="nav-item dropdown" style="margin-left: 50rem;">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                {{user.username}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'user_profile:profile-detail' user.id %}">My Profile</a>
+                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+              </div>
+            </li>
+            {% else %}
+            <div style="margin-left: 70rem;">
+              <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_signup' %}">Signin</a>
+            </li>
+          </ul>
+            </div>
+            {% endif %}
+                  </div>
+              </div>
+          </nav>
+      </div>
+
+     
+
+      <div class="container">
+
+      {% if messages %}
+            {% for message in messages %}
+            <div class="container" style="item-align:center">
+              {% comment %} <div class="alert alert-{{message.tags}}" style="text-align:center">{{message}}</div> {% endcomment %}
+              <div class="toast align-items-right  " style="margin-left:40%;height:50px" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                  <div class="toast-body" style="font-size:20px;color:green;">
+                  {{message}}
+                 </div>
+                  <button type="button" class="btn-close me-5 m-auto" style="align-items:right" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+              </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+      </div>
+        <div class="container" style="min-height:650px">
+        {% block content %}
+        {% endblock content  %}
+        </div>
+
+
+
+
+        <div class="footer" style="">
+        <div class="container-fluid bg-dark text-white mt-5 py-5 px-sm-3 px-md-5">
+    
+      </div>
+      <div class="container-fluid text-white py-4 px-sm-3 px-md-5" style="background: #111111;">
+        <div class="row pt-5">
+          <div class="col-lg-4 col-md-12 mb-5">
+              <h1 class="mb-3 display-5 text-capitalize text-white"><span class="text-primary">Lagan</span>Gatho</h1>
+              <p class="m-0">Ipsum amet sed vero et lorem stet eos ut, labore sed sed stet sea est ipsum ut. Volup amet ea sanct ipsum, dolore vero lorem no duo eirmod. Eirmod amet ipsum no ipsum lorem clita ut. Ut sed sit lorem ea lorem sed, amet stet sit sea ea diam tempor kasd kasd. Diam nonumy etsit tempor ut sed diam sed et ea</p>
+          </div>
+          <div class="col-lg-8 col-md-12">
+              <div class="row">
+                  <div class="col-md-4 mb-5">
+                      <h5 class="text-primary mb-4">Get In Touch</h5>
+                      <p><i class="fa fa-map-marker-alt mr-2"></i>Kathmandu, Nepal</p>
+                      <p><i class="fa fa-phone-alt mr-2"></i>+977 9863841707</p>
+                      <p><i class="fa fa-envelope mr-2"></i>LaganGatho@gmail.com</p>
+                      <div class="d-flex justify-content-start mt-4">
+                          <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 36px; height: 36px;" href="#"><i class="fab fa-twitter"></i></a>
+                          <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 36px; height: 36px;" href="#"><i class="fab fa-facebook-f"></i></a>
+                          <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 36px; height: 36px;" href="#"><i class="fab fa-linkedin-in"></i></a>
+                          <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 36px; height: 36px;" href="#"><i class="fab fa-instagram"></i></a>
+                      </div>
+                  </div>
+                  <div class="col-md-4 mb-5">
+                      <h5 class="text-primary mb-4">Popular Links</h5>
+                      <div class="d-flex flex-column justify-content-start">
+                          <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                          <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>About Us</a>
+                          <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Login</a>
+                          <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Register</a>
+                          <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Team</a>
+                          <a class="text-white" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                      </div>
+                  </div>
+                  <div class="col-md-4 mb-5">
+                      <h5 class="text-primary mb-4">Newsletter</h5>
+                      <form action="">
+                          <div class="form-group">
+                              <input type="text" class="form-control border-0" placeholder="Your Name" required="required" />
+                          </div>
+                          <div class="form-group">
+                              <input type="email" class="form-control border-0" placeholder="Your Email" required="required" />
+                          </div>
+                          <div>
+                              <button class="btn btn-lg btn-primary btn-block border-0" type="submit">Submit Now</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+          <div class="container-fluid text-white py-4 px-sm-3 px-md-5" style="background: #111111;">
+              <div class="col-md-6 text-center text-md-left mb-3 mb-md-0">
+                  <p class="m-0 text-white">
+                      &copy; <a class="text-white font-weight-bold" href="#">Lagan Gatho</a>. All Rights Reserved.
+                  </p>
+              </div>
+              <div class="col-md-6 text-center text-md-right">
+                  <ul class="nav d-inline-flex">
+                      <li class="nav-item">
+                          <a class="nav-link text-white py-0" href="#">Privacy</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-white py-0" href="#">Terms</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-white py-0" href="#">FAQs</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link text-white py-0" href="#">Help</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+    </div>
+    <input id="datepicker">
+
+
+  
+  
+
+      <!-- Footer End -->
+      {% comment %} </div> {% endcomment %}
+  
+
+      {% comment %} boot 5  {% endcomment %}
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+
+    {% comment %} <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
+    --> {% endcomment %}
+
+    {% comment %} The template scripts {% endcomment %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+  </body>
+</html>

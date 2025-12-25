@@ -1,0 +1,16 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Account Inactive" %}{% endblock %}
+
+{% block content %}
+<div class="container mt-4 pt-3  mb-4 pb-4 ps-5 pe-5 border" style="width: 650px; background-color:#dfe8e8 ">
+
+<h1>{% trans "Account Inactive" %}</h1>
+
+<p>{% trans "This account is inactive." %}</p>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+<div class="container" style="min-height:650px">
+<h3>All Profiles:</h3>
+
+{% if no %}
+<p>You have not register preference yet <a href="http://127.0.0.1:8000/preference/setup/">Register now</a>
+  {% endif %}
+{% if no_profile %}
+<p>You have not setup your profile <a href="http://127.0.0.1:8000/profile/profile_setup/">Setup now</a>
+{% endif %}
+{% for profile in all_profiles %}
+  <div class="card mb-3" style="max-width: 540px; ">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{{profile.userr.profile_pic.url}}" class="img-fluid rounded-start" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">****** {{profile.last_name}}</h5>
+
+          <i class="fas fa-map-marker-alt"></i><tb>&nbsp{{profile.userr.location.capitalize}}<br>
+          
+          {{ profile.userr.get_age}} years old <br>
+          {{profile.userr.religion.capitalize}}<br>
+          {{profile.userr.education.capitalize}}
+         
+          <a href={% url 'user_profile:profile-detail' profile.id %} class="btn btn-primary">View Profile</a> <span style="float:right;color:green;"> {{profile.final_match}}% Match</span>
+          <p class="card-text"><small class="text-muted">Joined on {{profile.date_joined |date:"d M, Y" }}</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endfor %}
+</div>
+
+{% endblock %}
