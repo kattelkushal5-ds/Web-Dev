@@ -1,0 +1,83 @@
+.header {
+    display: flex;
+    padding: 15px 20px;
+    justify-content: space-between;
+    position: sticky;
+    background-color: #fff;
+    z-index: 100;
+    top: 0;
+    box-shadow: 0px 5px 8px -9px rgba(0, 0, 0, 0.75);
+}
+
+.header-left {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.header-input {
+    display: flex;
+    align-items: center;
+    background-color: rgb(224, 222, 222);
+    margin-left: 10px;
+    border-radius: 999px;
+    padding: 10px;
+}
+
+.header-input>input {
+    border: none;
+    background-color: transparent;
+    outline-width: 0;
+}
+
+.header-left>img {
+    height: 40px;
+}
+
+.header-middle {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+.header-options>.MuiSvgIcon-root {
+    color: grey;
+}
+
+.header-options>.MuiSvgIcon-root:hover {
+    color: #2e81f4;
+}
+
+.header-options-active>.MuiSvgIcon-root {
+    color: #2e81f4
+}
+
+.header-options-active {
+    border-bottom: 4px solid #2e81f4;
+}
+
+.header-options {
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.header-options:hover {
+    background-color: #eff2f5;
+    border-radius: 10px;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: none;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+}
+
+.header-info>h4 {
+    margin-left: 10px;
+}
+
+.header-right {
+    display: flex;
+}

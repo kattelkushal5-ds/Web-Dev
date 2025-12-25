@@ -1,0 +1,59 @@
+
+.btn{
+    background: lightblue;
+    border-radius:6px;
+    height:2rem
+}
+
+.link{
+    text-decoration:none;
+    margin-bottom:1rem;
+    margin-left: 2px;
+}
+
+.linkWrapper{
+    display:flex;
+    justify-content:space-around;
+}
+
+.axis line{
+    stroke: #7C715E
+}
+
+.axis text {
+    fill: #7C715E
+}
+
+.marks{
+    fill: #137B80
+}
+
+.marks circle{
+    fill: #137180
+}
+
+
+.marks path{
+    stroke: #137180;
+    stroke-width: 4;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+
+.axisLabel{
+    font-size: 2em;
+    fill: #7C715E
+}
+
+.linkButton{
+    background: "lightblue";
+    border-radius:"6px";
+     height:"2rem";
+     width:"4rem"
+}
+
+.linkHome{
+    background: "lightgrey";
+    border-radius:"6px";
+     height:"2rem"
+}
